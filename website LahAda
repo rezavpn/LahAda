@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LahAda.id — Belanja Lebih Mudah & Hemat</title>
+<style>
+  /* ── RESET & BASE ── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --red: #E31837;
+    --red-dark: #B01228;
+    --orange: #F97316;
+    --navy: #1E2D55;
+    --navy-light: #2D4270;
+    --yellow: #FBBF24;
+    --gray-100: #F8F9FA;
+    --gray-200: #E9ECEF;
+    --gray-400: #ADB5BD;
+    --gray-600: #6B7280;
+    --gray-800: #1F2937;
+    --white: #FFFFFF;
+    --shadow: 0 2px 12px rgba(0,0,0,0.10);
+    --shadow-md: 0 4px 20px rgba(0,0,0,0.13);
+    --radius: 10px;
+  }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--gray-100); color: var(--gray-800); }
+  a { text-decoration: none; color: inherit; }
+  img { max-width: 100%; display: block; }
+  ul { list-style: none; }
+
+  /* ── TOP BAR ── */
+  .topbar {
+    background: var(--red-dark);
+    color: #fff;
+    font-size: 12px;
+    padding: 5px 0;
+    text-align: center;
+    letter-spacing: 0.3px;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--red);
+    padding: 12px 0 0;
+    position: sticky; top: 0; z-index: 100;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  }
+  .header-top {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px 12px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  .logo {
+    font-size: 26px;
+    font-weight: 900;
+    color: #fff;
+    white-space: nowrap;
+    letter-spacing: -0.5px;
+  }
+  .logo span { color: var(--yellow); }
+  .search-bar {
+    flex: 1;
+    display: flex;
+    background: #fff;
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  }
+  .search-bar input {
+    flex: 1; border: none; outline: none;
+    padding: 10px 16px; font-size: 14px;
+  }
+  .search-bar button {
+    background: var(--orange);
+    border: none; cursor: pointer;
+    padding: 10px 20px; color: #fff;
+    font-size: 16px; font-weight: bold;
+    transition: background 0.2s;
+  }
+  .search-bar button:hover { background: #e0600a; }
+  .header-actions { display: flex; gap: 16px; align-items: center; }
+  .header-actions a {
+    color: #fff; font-size: 12px; text-align: center;
+    display: flex; flex-direction: column; align-items: center; gap: 2px;
+    cursor: pointer; transition: opacity 0.2s;
+  }
+  .header-actions a:hover { opacity: 0.8; }
+  .header-actions .icon { font-size: 20px; }
+  .cart-badge {
+    background: var(--yellow); color: var(--navy);
+    font-size: 10px; font-weight: bold;
+    border-radius: 50%; width: 18px; height: 18px;
+    display: flex; align-items: center; justify-content: center;
+    position: relative; top: -8px; left: -8px;
+    margin-right: -8px;
+  }
+
+  /* NAV */
+  nav {
+    background: var(--red-dark);
+    max-width: 100%;
+  }
+  .nav-inner {
+    max-width: 1200px; margin: 0 auto; padding: 0 20px;
+    display: flex; gap: 0; overflow-x: auto;
+  }
+  .nav-inner a {
+    color: #fff; font-size: 13px;
+    padding: 9px 16px; white-space: nowrap;
+    border-radius: 4px 4px 0 0;
+    transition: background 0.2s;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .nav-inner a:hover, .nav-inner a.active { background: rgba(255,255,255,0.15); }
+
+  /* ── MAIN WRAPPER ── */
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+  /* ── HERO / BANNER ── */
+  .hero {
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    gap: 14px;
+    margin: 16px 0;
+  }
+  .banner-main {
+    background: linear-gradient(135deg, var(--navy) 0%, #2D4270 50%, #E31837 100%);
+    border-radius: var(--radius);
+    padding: 40px 44px;
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+    min-height: 230px;
+    display: flex; flex-direction: column; justify-content: center;
+  }
+  .banner-main::before {
+    content: '';
+    position: absolute; right: -30px; top: -40px;
+    width: 280px; height: 280px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 50%;
+  }
+  .banner-main::after {
+    content: '🛍️';
+    position: absolute; right: 50px; top: 50%;
+    transform: translateY(-50%);
+    font-size: 100px;
+    opacity: 0.25;
+  }
+  .banner-tag {
+    background: var(--yellow); color: var(--navy);
+    font-size: 11px; font-weight: 800;
+    padding: 4px 12px; border-radius: 20px;
+    display: inline-block; margin-bottom: 12px;
+    letter-spacing: 1px; text-transform: uppercase;
+  }
+  .banner-main h1 { font-size: 36px; font-weight: 900; line-height: 1.1; margin-bottom: 8px; }
+  .banner-main p { font-size: 15px; opacity: 0.85; margin-bottom: 18px; }
+  .btn {
+    display: inline-block; padding: 11px 26px;
+    border-radius: 6px; font-weight: 700;
+    font-size: 14px; cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+    border: none;
+  }
+  .btn:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+  .btn-orange { background: var(--orange); color: #fff; }
+  .btn-white { background: #fff; color: var(--red); }
+
+  .banner-side { display: flex; flex-direction: column; gap: 14px; }
+  .banner-small {
+    flex: 1; border-radius: var(--radius); padding: 20px 22px;
+    color: #fff; display: flex; flex-direction: column; justify-content: center;
+    position: relative; overflow: hidden;
+  }
+  .banner-small-1 { background: linear-gradient(135deg, #F97316, #FBBF24); }
+  .banner-small-2 { background: linear-gradient(135deg, #7C3AED, #DB2777); }
+  .banner-small::after { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); font-size: 40px; opacity: 0.4; }
+  .banner-small-1::after { content: '⚡'; }
+  .banner-small-2::after { content: '💎'; }
+  .banner-small h3 { font-size: 16px; font-weight: 800; margin-bottom: 4px; }
+  .banner-small p { font-size: 12px; opacity: 0.9; }
+
+  /* ── FLASH SALE ── */
+  .section-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin: 24px 0 14px;
+  }
+  .section-title {
+    font-size: 20px; font-weight: 800; color: var(--gray-800);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .section-title .badge {
+    background: var(--red); color: #fff;
+    font-size: 11px; font-weight: 700;
+    padding: 3px 10px; border-radius: 4px;
+    letter-spacing: 0.5px;
+  }
+  .see-all {
+    font-size: 13px; color: var(--red); font-weight: 600;
+    display: flex; align-items: center; gap: 4px;
+    cursor: pointer; transition: gap 0.2s;
+  }
+  .see-all:hover { gap: 8px; }
+
+  /* Countdown */
+  .countdown {
+    display: flex; align-items: center; gap: 8px;
+    background: var(--navy); border-radius: 8px;
+    padding: 8px 16px; margin-bottom: 16px;
+    color: #fff; font-size: 13px;
+  }
+  .countdown-label { font-weight: 600; margin-right: 4px; }
+  .time-block {
+    background: var(--red); border-radius: 5px;
+    padding: 4px 10px; font-size: 18px;
+    font-weight: 900; font-family: monospace;
+    min-width: 42px; text-align: center;
+  }
+  .time-sep { font-size: 20px; font-weight: 900; }
+
+  /* ── PRODUCT GRID ── */
+  .product-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
+    margin-bottom: 8px;
+  }
+  .product-card {
+    background: #fff; border-radius: var(--radius);
+    overflow: hidden; box-shadow: var(--shadow);
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: pointer; position: relative;
+  }
+  .product-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
+  .product-img {
+    width: 100%; height: 160px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 64px; background: var(--gray-100);
+    transition: transform 0.3s;
+  }
+  .product-card:hover .product-img { transform: scale(1.05); }
+  .product-info { padding: 10px 12px 14px; }
+  .product-name {
+    font-size: 13px; color: var(--gray-800);
+    margin-bottom: 6px; line-height: 1.4;
+    display: -webkit-box; -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical; overflow: hidden;
+  }
+  .product-price { font-size: 16px; font-weight: 800; color: var(--red); }
+  .product-original {
+    font-size: 12px; color: var(--gray-400);
+    text-decoration: line-through; margin-left: 4px;
+  }
+  .product-discount {
+    background: #FEF2F2; color: var(--red);
+    font-size: 11px; font-weight: 700;
+    padding: 2px 6px; border-radius: 4px;
+    display: inline-block; margin-top: 4px;
+  }
+  .product-rating { font-size: 11px; color: var(--gray-400); margin-top: 4px; }
+  .product-badge {
+    position: absolute; top: 10px; left: 10px;
+    background: var(--red); color: #fff;
+    font-size: 10px; font-weight: 700;
+    padding: 3px 7px; border-radius: 4px;
+  }
+  .wishlist-btn {
+    position: absolute; top: 8px; right: 8px;
+    background: rgba(255,255,255,0.9); border: none;
+    border-radius: 50%; width: 30px; height: 30px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; font-size: 15px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+    transition: transform 0.2s;
+  }
+  .wishlist-btn:hover { transform: scale(1.2); }
+
+  /* ── CATEGORIES ── */
+  .categories {
+    background: #fff; border-radius: var(--radius);
+    padding: 20px; box-shadow: var(--shadow);
+    margin-bottom: 24px;
+  }
+  .cat-grid {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 8px; margin-top: 16px;
+  }
+  .cat-item {
+    display: flex; flex-direction: column;
+    align-items: center; gap: 8px;
+    padding: 14px 8px; border-radius: 8px;
+    cursor: pointer; transition: background 0.2s;
+    text-align: center;
+  }
+  .cat-item:hover { background: #FEF2F2; }
+  .cat-icon {
+    width: 52px; height: 52px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px;
+  }
+  .cat-name { font-size: 12px; font-weight: 600; color: var(--gray-800); }
+
+  /* ── PROMO BANNER STRIP ── */
+  .promo-strip {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 14px; margin: 24px 0;
+  }
+  .promo-card {
+    border-radius: var(--radius); padding: 22px 24px;
+    color: #fff; display: flex; align-items: center; gap: 16px;
+    box-shadow: var(--shadow-md); cursor: pointer;
+    transition: transform 0.2s;
+  }
+  .promo-card:hover { transform: translateY(-3px); }
+  .promo-card-1 { background: linear-gradient(135deg, #E31837, #FF6B35); }
+  .promo-card-2 { background: linear-gradient(135deg, #1E2D55, #2D6A4F); }
+  .promo-card-3 { background: linear-gradient(135deg, #7C3AED, #2563EB); }
+  .promo-emoji { font-size: 38px; }
+  .promo-text h4 { font-size: 16px; font-weight: 800; margin-bottom: 3px; }
+  .promo-text p { font-size: 12px; opacity: 0.9; }
+
+  /* ── PRODUCT SECTION ── */
+  .products-section {
+    background: #fff; border-radius: var(--radius);
+    padding: 20px; box-shadow: var(--shadow);
+    margin-bottom: 24px;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--navy); color: #fff;
+    padding: 40px 0 0;
+    margin-top: 40px;
+  }
+  .footer-grid {
+    display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 32px; max-width: 1200px; margin: 0 auto; padding: 0 20px;
+  }
+  .footer-brand .logo { font-size: 22px; margin-bottom: 12px; }
+  .footer-brand p { font-size: 13px; opacity: 0.75; line-height: 1.6; margin-bottom: 16px; }
+  .social-links { display: flex; gap: 10px; }
+  .social-links a {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: rgba(255,255,255,0.1);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; transition: background 0.2s;
+  }
+  .social-links a:hover { background: var(--red); }
+  .footer-col h4 { font-size: 14px; font-weight: 700; margin-bottom: 14px; color: var(--yellow); }
+  .footer-col ul li { margin-bottom: 8px; }
+  .footer-col ul li a { font-size: 13px; opacity: 0.75; transition: opacity 0.2s; }
+  .footer-col ul li a:hover { opacity: 1; }
+  .footer-bottom {
+    margin-top: 32px; padding: 16px 20px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    display: flex; align-items: center; justify-content: space-between;
+    max-width: 1200px; margin-left: auto; margin-right: auto;
+    font-size: 12px; opacity: 0.6;
+  }
+  .payment-icons { display: flex; gap: 8px; }
+  .payment-icons span {
+    background: rgba(255,255,255,0.15);
+    padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: 600;
+  }
+
+  /* ── FLOATING CART ── */
+  .floating-cart {
+    position: fixed; bottom: 28px; right: 28px; z-index: 200;
+    background: var(--red); color: #fff;
+    width: 56px; height: 56px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px; cursor: pointer;
+    box-shadow: 0 4px 16px rgba(227,24,55,0.5);
+    transition: transform 0.2s;
+  }
+  .floating-cart:hover { transform: scale(1.1); }
+  .floating-cart .badge {
+    position: absolute; top: -4px; right: -4px;
+    background: var(--yellow); color: var(--navy);
+    font-size: 10px; font-weight: 900;
+    width: 20px; height: 20px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  /* ── MODAL / PRODUCT DETAIL ── */
+  .modal-overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,0.5); z-index: 300;
+    align-items: center; justify-content: center;
+    padding: 20px;
+  }
+  .modal-overlay.active { display: flex; }
+  .modal {
+    background: #fff; border-radius: 14px;
+    max-width: 700px; width: 100%;
+    padding: 28px; position: relative;
+    animation: slideUp 0.25s ease;
+    max-height: 90vh; overflow-y: auto;
+  }
+  @keyframes slideUp {
+    from { transform: translateY(30px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+  .modal-close {
+    position: absolute; top: 16px; right: 16px;
+    background: var(--gray-100); border: none;
+    width: 32px; height: 32px; border-radius: 50%;
+    font-size: 18px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .modal-body { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .modal-img {
+    background: var(--gray-100); border-radius: 10px;
+    height: 220px; display: flex; align-items: center;
+    justify-content: center; font-size: 90px;
+  }
+  .modal-info h2 { font-size: 18px; margin-bottom: 8px; line-height: 1.3; }
+  .modal-price { font-size: 26px; font-weight: 900; color: var(--red); margin-bottom: 4px; }
+  .modal-orig { font-size: 14px; color: var(--gray-400); text-decoration: line-through; }
+  .modal-disc { background: #FEF2F2; color: var(--red); font-size: 12px; font-weight: 700; padding: 3px 8px; border-radius: 4px; display: inline-block; margin-top: 6px; }
+  .modal-desc { font-size: 13px; color: var(--gray-600); margin: 14px 0; line-height: 1.6; }
+  .qty-picker { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+  .qty-btn {
+    width: 32px; height: 32px; border-radius: 6px;
+    border: 1.5px solid var(--gray-200); background: #fff;
+    font-size: 18px; cursor: pointer; display: flex;
+    align-items: center; justify-content: center;
+    transition: background 0.15s;
+  }
+  .qty-btn:hover { background: var(--gray-100); }
+  .qty-val { font-size: 16px; font-weight: 700; min-width: 24px; text-align: center; }
+  .modal-actions { display: flex; gap: 10px; }
+  .btn-add-cart {
+    flex: 1; padding: 12px; border-radius: 8px;
+    border: 2px solid var(--orange); background: #fff;
+    color: var(--orange); font-weight: 700; font-size: 14px;
+    cursor: pointer; transition: background 0.2s;
+  }
+  .btn-add-cart:hover { background: #FFF7ED; }
+  .btn-buy-now {
+    flex: 1; padding: 12px; border-radius: 8px;
+    border: none; background: var(--red);
+    color: #fff; font-weight: 700; font-size: 14px;
+    cursor: pointer; transition: background 0.2s;
+  }
+  .btn-buy-now:hover { background: var(--red-dark); }
+
+  /* ── TOAST ── */
+  .toast {
+    position: fixed; bottom: 100px; right: 28px; z-index: 400;
+    background: var(--navy); color: #fff;
+    padding: 12px 20px; border-radius: 8px;
+    font-size: 14px; font-weight: 600;
+    box-shadow: var(--shadow-md);
+    transform: translateX(120px); opacity: 0;
+    transition: all 0.3s;
+  }
+  .toast.show { transform: translateX(0); opacity: 1; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    .product-grid { grid-template-columns: repeat(3, 1fr); }
+    .cat-grid { grid-template-columns: repeat(4, 1fr); }
+    .footer-grid { grid-template-columns: 1fr 1fr; gap: 24px; }
+    .hero { grid-template-columns: 1fr; }
+    .banner-side { flex-direction: row; }
+    .promo-strip { grid-template-columns: 1fr; }
+    .modal-body { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 600px) {
+    .header-actions .label { display: none; }
+    .product-grid { grid-template-columns: repeat(2, 1fr); }
+    .cat-grid { grid-template-columns: repeat(4, 1fr); }
+    .banner-main h1 { font-size: 26px; }
+    .footer-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">🔥 GRATIS ONGKIR untuk pembelian di atas Rp 50.000 | Download App LahAda sekarang!</div>
+
+<!-- HEADER -->
+<header>
+  <div class="header-top">
+    <div class="logo">🛒 Toko<span>Belanja</span>.id</div>
+    <div class="search-bar">
+      <input type="text" placeholder="Cari produk, merek, kategori..." id="searchInput">
+      <button onclick="handleSearch()">🔍</button>
+    </div>
+    <div class="header-actions">
+      <a href="#">
+        <span class="icon">👤</span>
+        <span class="label">Masuk</span>
+      </a>
+      <a href="#" onclick="toggleCart(event)">
+        <span style="display:flex;align-items:center;">
+          <span class="icon">🛒</span>
+          <span class="cart-badge" id="cartCount">0</span>
+        </span>
+        <span class="label">Keranjang</span>
+      </a>
+      <a href="#">
+        <span class="icon">❤️</span>
+        <span class="label">Wishlist</span>
+      </a>
+    </div>
+  </div>
+  <nav>
+    <div class="nav-inner">
+      <a href="#" class="active">🏠 Beranda</a>
+      <a href="#flash-sale">⚡ Flash Sale</a>
+      <a href="#kategori">📂 Kategori</a>
+      <a href="#elektronik">💻 Elektronik</a>
+      <a href="#fashion">👗 Fashion</a>
+      <a href="#kecantikan">💄 Kecantikan</a>
+      <a href="#rumah">🏠 Rumah Tangga</a>
+      <a href="#tentang">ℹ️ Tentang Kami</a>
+      <a href="#kontak">📞 Kontak</a>
+    </div>
+  </nav>
+</header>
+
+<!-- MAIN CONTENT -->
+<main class="container">
+
+  <!-- HERO BANNER -->
+  <div class="hero">
+    <div class="banner-main">
+      <div class="banner-tag">⚡ Flash Sale Spesial</div>
+      <h1>Diskon Hingga<br><span style="color:var(--yellow)">70% OFF!</span></h1>
+      <p>Penawaran terbaik hanya hari ini. Jangan sampai kehabisan!</p>
+      <a href="#flash-sale" class="btn btn-orange">Belanja Sekarang →</a>
+    </div>
+    <div class="banner-side">
+      <div class="banner-small banner-small-1">
+        <h3>Voucher Gratis</h3>
+        <p>Cashback 20% transaksi pertama</p>
+      </div>
+      <div class="banner-small banner-small-2">
+        <h3>Member VIP</h3>
+        <p>Diskon eksklusif tiap hari</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- KATEGORI -->
+  <section id="kategori">
+    <div class="categories">
+      <div class="section-header" style="margin:0 0 0;">
+        <div class="section-title">📂 Kategori Produk</div>
+      </div>
+      <div class="cat-grid">
+        <div class="cat-item" onclick="filterCategory('elektronik')">
+          <div class="cat-icon" style="background:#DBEAFE;">💻</div>
+          <span class="cat-name">Elektronik</span>
+        </div>
+        <div class="cat-item" onclick="filterCategory('fashion')">
+          <div class="cat-icon" style="background:#FCE7F3;">👗</div>
+          <span class="cat-name">Fashion</span>
+        </div>
+        <div class="cat-item" onclick="filterCategory('kecantikan')">
+          <div class="cat-icon" style="background:#FEF9C3;">💄</div>
+          <span class="cat-name">Kecantikan</span>
+        </div>
+        <div class="cat-item" onclick="filterCategory('rumah')">
+          <div class="cat-icon" st
